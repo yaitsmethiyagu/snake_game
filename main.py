@@ -1,7 +1,7 @@
-import random
 from snake import Snake
 from turtle import Screen
 from food import Food
+from score import Score
 import time
 
 screen = Screen()
@@ -9,48 +9,42 @@ screen.setup(width=600, height=600)
 screen.title("Snake Game")
 screen.bgcolor("black")
 screen.tracer(0)
-screen.listen()
 
-snake = Snake()
+SPEED = 0.3
+
 food = Food()
-food.food_spawn()
-while True:
+snake = Snake()
+score = Score()
+WALL_H = 290
+is_on = True
+
+screen.listen()
+screen.onkey(fun=snake.turn_up, key="Up")
+screen.onkey(fun=snake.turn_down, key="Down")
+screen.onkey(fun=snake.turn_left, key="Left")
+screen.onkey(fun=snake.turn_right, key="Right")
+
+while is_on:
+
+    screen.update()
+    time.sleep(SPEED)
     snake.snake_move()
     screen.update()
-    time.sleep(.5)
 
-    screen.onkey(fun=snake.turn_up, key="Up")
-    screen.onkey(fun=snake.turn_down, key="Down")
-    screen.onkey(fun=snake.turn_left, key="Left")
-    screen.onkey(fun=snake.turn_right, key="Right")
+    for segment in snake.snake_body[1:]:
+        if snake.snake_head.distance(segment) < 15:
+            print(snake.snake_body.index(segment))
+            score.game_over()
+            print("Collide")
+            is_on = False
 
-# def food_spawn():
-#     random_location = (random.randrange(-280, 280, 20), random.randrange(-280, 280, 20))
-#
-#     food = Turtle(shape="circle")
-#     food.penup()
-#
-#     food.color("white")
-#     food.setposition(random_location)
-#     return food
+    if snake.snake_head.distance(food) < 10:
+        food.food_spawn()
+        snake.grow_body()
+        score.update_score(1)
 
-
-# def eat_food(food):
-#     if turtle_body[len(turtle_body) - 1].position() == food.position():
-#         print("met")
-#         print(food.position())
-#         print(turtle_body[len(turtle_body) - 1].position())
-#         grow_body()
-#         food.clear()
-#     print(f"{food.position()} food ")
-#     print(f"{turtle_body[len(turtle_body) - 1].position()} tutrle")
-
-
-# is_game_on = True
-# food = food_spawn()
-
-
-#
-#
+    if snake.snake_head.xcor() < -WALL_H or snake.snake_head.xcor() > WALL_H or snake.snake_head.ycor() > WALL_H or snake.snake_head.ycor() < -WALL_H:
+        score.game_over()
+        is_on = False
 
 screen.exitonclick()
