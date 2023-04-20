@@ -51,3 +51,18 @@ class Snake:
     def turn_right(self):
         if self.snake_head.heading() != 90 * 2:
             self.snake_head.setheading(90 * 0)
+
+    def reset_snake(self):
+        for segment in self.snake_body:
+            segment.hideturtle()
+        self.snake_body.clear()
+        self.snake_body = [self.segment]
+        # self.grow_body()
+        # self.grow_body()
+        # self.grow_body()
+        self.snake_head = self.snake_body[0]
+        self.snake_head.showturtle()
+        self.snake_head.goto(0, 0)
+        self.grow_body()
+        self.grow_body()
+

@@ -33,10 +33,10 @@ while is_on:
 
     for segment in snake.snake_body[1:]:
         if snake.snake_head.distance(segment) < 15:
-            print(snake.snake_body.index(segment))
-            score.game_over()
-            print("Collide")
-            is_on = False
+            score.reset_score()
+            snake.reset_snake()
+            time.sleep(1)
+            # is_on = False
 
     if snake.snake_head.distance(food) < 10:
         food.food_spawn()
@@ -44,7 +44,9 @@ while is_on:
         score.update_score(1)
 
     if snake.snake_head.xcor() < -WALL_H or snake.snake_head.xcor() > WALL_H or snake.snake_head.ycor() > WALL_H or snake.snake_head.ycor() < -WALL_H:
-        score.game_over()
-        is_on = False
+        score.reset_score()
+        snake.reset_snake()
+        time.sleep(1)
+        # is_on = False
 
 screen.exitonclick()
